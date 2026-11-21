@@ -22,27 +22,16 @@ dotnet test ServiceFlow.sln
 
 ### Connection string
 
-`appsettings.json` keeps `DefaultConnection` empty on purpose.
+`appsettings.json` keeps `DefaultConnection` empty on purpose. **Never commit SQL passwords.**
 
-`appsettings.Development.json` uses Windows Trusted Connection against local SQL Server:
-
-```text
-Server=localhost;Database=ServiceFlowLK;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true
-```
-
-Override without editing files:
+Preferred local setup: user secrets (overrides Development settings):
 
 ```powershell
-$env:ConnectionStrings__DefaultConnection = "Server=localhost;Database=ServiceFlowLK;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
+cd backend/src/ServiceFlow.Api
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=YOUR_SERVER;Database=ServiceFlowLK;User Id=sa;Password=YOUR_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true;Encrypt=False"
 ```
 
-Or use user secrets from `ServiceFlow.Api`:
-
-```powershell
-cd src/ServiceFlow.Api
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost;Database=ServiceFlowLK;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
-```
+`appsettings.Development.json` may use Windows Trusted Connection as a non-secret fallback.
 
 ### Apply migrations (manual, reviewed)
 
@@ -80,10 +69,17 @@ npm start
 
 App runs at `http://localhost:4200` and expects the API CORS origin configured in backend settings.
 
-## Tenant security notes (Phase 1)
+## Auth notes (Phase 2)
 
-- `TenantId` is assigned by server-side domain factories / application services.
-- Clients must never be trusted as the authority for tenant identity.
-- EF Core global query filters hide tenant-owned rows unless a trusted `ITenantContext` is set.
-- Cross-tenant writes are rejected in `ApplicationDbContext.SaveChangesAsync` when a tenant context is active.
-- Authentication/session and tenant registration land in Phase 2.
+- Register: `POST /api/v1/tenants/register`
+- Login/logout/me: `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/me`
+- CSRF: `GET /api/v1/auth/csrf` sets `XSRF-TOKEN`; send header `X-XSRF-TOKEN` on mutating authenticated calls
+- Angular uses `proxy.conf.json` so cookies are same-site in local HTTP development
+- Do not store tokens in `localStorage`
+
+## Tenant security notes
+
+- `TenantId` is assigned by server-side workflows only.
+- `TenantContextMiddleware` derives tenant from authenticated user membership.
+- EF query filters + save-time checks enforce isolation.
+- Invitations are hashed, single-use, expiring; Owner cannot be assigned by invitation.

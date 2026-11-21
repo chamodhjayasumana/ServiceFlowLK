@@ -24,6 +24,8 @@ public sealed class ApplicationDbContext
 
     public DbSet<Customer> Customers => Set<Customer>();
 
+    public DbSet<EmployeeInvitation> EmployeeInvitations => Set<EmployeeInvitation>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -44,6 +46,9 @@ public sealed class ApplicationDbContext
         // When no tenant is set, TenantId resolves to Guid.Empty and no owned rows match.
         builder.Entity<Customer>()
             .HasQueryFilter(c => c.TenantId == CurrentTenantId);
+
+        builder.Entity<EmployeeInvitation>()
+            .HasQueryFilter(i => i.TenantId == CurrentTenantId);
     }
 
     private Guid CurrentTenantId => _tenantContext.TenantId ?? Guid.Empty;

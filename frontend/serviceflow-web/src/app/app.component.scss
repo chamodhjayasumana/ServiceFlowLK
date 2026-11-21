@@ -40,8 +40,18 @@ nav a {
 }
 
 nav a.active,
-nav a:hover {
+nav a:hover,
+.linkish:hover {
   color: #0b6e4f;
+}
+
+.linkish {
+  border: 0;
+  background: transparent;
+  color: #3b4d53;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
 }
 
 main {

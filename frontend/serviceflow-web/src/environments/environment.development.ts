@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://localhost:7142/api/v1'
+  // Use Angular proxy (same-origin) so HttpOnly cookies work with SameSite.
+  apiBaseUrl: '/api/v1'
 };

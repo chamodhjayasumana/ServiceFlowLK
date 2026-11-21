@@ -63,6 +63,7 @@ npm start
 
 ## Current status
 
-**Phase 1 complete when verified:** solution builds, tests pass, health endpoint available, Angular app scaffolds with routing.
+**Phase 1 complete** — foundation, health, OpenAPI, Tenant/Customer schema.  
+**Phase 2 complete** — registration, cookie sessions, CSRF, roles, invitations, Angular auth UI, security tests.
 
-**Next:** Phase 2 — Identity, tenant registration, permissions, and cross-tenant isolation integration tests against authenticated routes.
+**Next:** Phase 3 — Customers and devices APIs/UI.

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using ServiceFlow.Application.Common;
 
 namespace ServiceFlow.Api.Middleware;
 
@@ -35,12 +36,24 @@ public sealed class ExceptionHandlingMiddleware
     {
         var traceId = Activity.Current?.Id ?? context.TraceIdentifier;
 
-        _logger.LogError(
-            exception,
-            "Unhandled exception for {Method} {Path}. TraceId={TraceId}",
-            context.Request.Method,
-            context.Request.Path,
-            traceId);
+        if (exception is not AppException)
+        {
+            _logger.LogError(
+                exception,
+                "Unhandled exception for {Method} {Path}. TraceId={TraceId}",
+                context.Request.Method,
+                context.Request.Path,
+                traceId);
+        }
+        else
+        {
+            _logger.LogWarning(
+                exception,
+                "Application exception for {Method} {Path}. TraceId={TraceId}",
+                context.Request.Method,
+                context.Request.Path,
+                traceId);
+        }
 
         var (statusCode, title, detail) = MapException(exception);
 
@@ -48,7 +61,7 @@ public sealed class ExceptionHandlingMiddleware
         {
             Status = statusCode,
             Title = title,
-            Detail = _environment.IsDevelopment() ? detail : title,
+            Detail = _environment.IsDevelopment() || exception is AppException ? detail : title,
             Instance = context.Request.Path,
             Extensions =
             {
@@ -65,6 +78,16 @@ public sealed class ExceptionHandlingMiddleware
     {
         return exception switch
         {
+            AppException app => (
+                app.StatusCode,
+                app.StatusCode switch
+                {
+                    StatusCodes.Status401Unauthorized => "Unauthorized",
+                    StatusCodes.Status403Forbidden => "Forbidden",
+                    StatusCodes.Status409Conflict => "Conflict",
+                    _ => "Bad request"
+                },
+                app.Message),
             ArgumentException => (
                 StatusCodes.Status400BadRequest,
                 "Invalid request",

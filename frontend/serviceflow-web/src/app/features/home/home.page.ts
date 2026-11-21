@@ -7,15 +7,15 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
   template: `
     <section class="home">
-      <p class="eyebrow">Phase 1 foundation</p>
+      <p class="eyebrow">Repair management SaaS</p>
       <h1>ServiceFlow LK</h1>
       <p class="lead">
         Multi-tenant repair management for Sri Lankan device-repair shops.
-        Authentication and shop workflows arrive in later phases.
+        Register your business or sign in to continue.
       </p>
       <nav class="actions">
-        <a routerLink="/dashboard">Dashboard shell</a>
-        <a routerLink="/customers">Customers shell</a>
+        <a routerLink="/register">Register business</a>
+        <a routerLink="/login">Sign in</a>
       </nav>
     </section>
   `,

@@ -444,14 +444,15 @@ ServiceFlowLK/
 
 ### Phase 2 — Identity, tenants, and permissions
 
-- [ ] Implement tenant and owner registration transaction.
-- [ ] Implement secure login/logout/session management.
-- [ ] Add employee invitations and roles.
-- [ ] Add permission policies and active tenant context.
-- [ ] Add tenant-scoped EF Core mappings and database constraints.
-- [ ] Write cross-tenant isolation and authorization integration tests.
+- [x] Implement tenant and owner registration transaction.
+- [x] Implement secure login/logout/session management.
+- [x] Add employee invitations and roles.
+- [x] Add permission policies and active tenant context.
+- [x] Add tenant-scoped EF Core mappings and database constraints.
+- [x] Write cross-tenant isolation and authorization integration tests.
 
-**Done when:** Tenant A cannot read or mutate Tenant B data under any tested route; anonymous/unauthorized calls are rejected.
+**Done when:** Tenant A cannot read or mutate Tenant B data under any tested route; anonymous/unauthorized calls are rejected.  
+**Verified:** 2026-11-21 — cookie auth + CSRF; tenant context from membership only; Owner/Manager/Receptionist/Technician; invitations; Angular auth UI; 9 unit + 14 integration tests passed; migration `AddEmployeeInvitations` applied.
 
 ### Phase 3 — Customers and devices
 
