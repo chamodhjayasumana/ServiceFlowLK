@@ -1,0 +1,41 @@
+## .NET
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/.vs/
+**/TestResults/
+**/coverage/
+**/publish/
+
+## Secrets / local config
+**/appsettings.*.local.json
+**/secrets.json
+.env
+.env.*
+!.env.example
+
+## User secrets are outside the repo by design; never commit exported dumps
+**/user-secrets-backup/
+
+## Node / Angular
+**/node_modules/
+**/dist/
+**/.angular/
+**/out-tsc/
+npm-debug.log*
+yarn-error.log*
+
+## IDE
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+## OS
+Desktop.ini
+
+## Misc
+*.log
+*.tmp
+*.bak

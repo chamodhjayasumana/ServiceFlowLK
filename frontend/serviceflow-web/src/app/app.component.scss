@@ -1,0 +1,49 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(11, 110, 79, 0.12), transparent 40%),
+    linear-gradient(180deg, #f4f8f7 0%, #e7eef0 100%);
+  color: #142227;
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+}
+
+.shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 1px solid rgba(20, 34, 39, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #0f2a33;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: #3b4d53;
+  text-decoration: none;
+}
+
+nav a.active,
+nav a:hover {
+  color: #0b6e4f;
+}
+
+main {
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
